@@ -303,19 +303,34 @@ class User {
         }
 
         const otp = common.generateOtp(); // Generate OTP
-        const token = common.generateToken(); // Generate Token
+        // const token = common.generateToken(); // Generate Token
 
-        userModel.createVerification(userId, otp, action, verifyWith, token, (err, result) => {
+        // userModel.createVerification(userId, otp, action, verifyWith, token, (err, result) => {
+        //     if (err) {
+        //         return common.response(res, err, 500);
+        //     }
+
+        //     common.response(res, {
+        //         code: responseCode.SUCCESS,
+        //         message: "OTP and token generated successfully.",
+        //         data: {
+        //             otp, // In production, send this via Email/SMS
+        //             token,
+        //             verificationId: result.data.verificationId
+        //         }
+        //     });
+        // });
+
+        userModel.createOtpVerification(userId, otp, action, verifyWith, (err, result) => {
             if (err) {
                 return common.response(res, err, 500);
             }
 
             common.response(res, {
                 code: responseCode.SUCCESS,
-                message: "OTP and token generated successfully.",
+                message: "OTP generated successfully.",
                 data: {
                     otp, // In production, send this via Email/SMS
-                    token,
                     verificationId: result.data.verificationId
                 }
             });
@@ -364,25 +379,40 @@ class User {
         }
 
         const otp = common.generateOtp();
-        const token = common.generateToken();
+        // const token = common.generateToken();
 
-        userModel.createVerification(userId, otp, action, verifyWith, token, (err, otpResult) => {
+        // userModel.createVerification(userId, otp, action, verifyWith, token, (err, otpResult) => {
+        //     if (err) {
+
+        //         return common.response(res, {
+        //             code: responseCode.OPERATION_FAILED,
+        //             message: "Failed to create verification.",
+        //             data: err
+        //         }, 500);
+        //     }
+
+        //     common.response(res, {
+        //         code: responseCode.SUCCESS,
+        //         message: "OTP resent successfully.",
+        //         data: {
+        //             userId,
+        //             otp, // In production, send via Email/SMS
+        //             verificationId: otpResult.data.verificationId
+        //         }
+        //     });
+        // });
+
+        userModel.createOtpVerification(userId, otp, action, verifyWith, (err, result) => {
             if (err) {
-
-                return common.response(res, {
-                    code: responseCode.OPERATION_FAILED,
-                    message: "Failed to create verification.",
-                    data: err
-                }, 500);
+                return common.response(res, err, 500);
             }
 
             common.response(res, {
                 code: responseCode.SUCCESS,
-                message: "OTP resent successfully.",
+                message: "OTP generated successfully.",
                 data: {
-                    userId,
-                    otp, // In production, send via Email/SMS
-                    verificationId: otpResult.data.verificationId
+                    otp, // In production, send this via Email/SMS
+                    verificationId: result.data.verificationId
                 }
             });
         });

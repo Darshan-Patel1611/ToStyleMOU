@@ -122,6 +122,31 @@ class UserModel {
             });
         });
     }
+
+    createOtpVerification(userId, otp, action, verifyWith, callback) {
+        const query = `
+        INSERT INTO tbl_verifications 
+        (user_id, otp, action, verify_with, created_at) 
+        VALUES (?, ?, ?, ?, NOW())
+    `;
+
+        database.query(query, [userId, otp, action, verifyWith], (err, results) => {
+            if (err) {
+                return callback({
+                    code: responseCode.OPERATION_FAILED,
+                    message: err.message,
+                    data: null
+                }, null);
+            }
+
+            callback(null, {
+                code: responseCode.SUCCESS,
+                message: "OTP generated successfully",
+                data: { verificationId: results.insertId }
+            });
+        });
+    }
+
     // update tokan, action and verify while login
     updateTokenActionAndVerify = (userId, token, action, verify_with, callback) => {
         const query = `
